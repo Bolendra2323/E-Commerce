@@ -39,25 +39,25 @@ let uploadFile = async(file) => {
 
 
 
-const isValidRequestBody = function (requestBody) {
+const isValidRequestBody = function(requestBody) {
     return Object.keys(requestBody).length > 0;
 }
 
 
-const isValid = function (value) {
+const isValid = function(value) {
     if (typeof value === 'undefined' || value === null) return false
     if (typeof value === 'string' && value.trim().length === 0) return false
     return true;
 }
 
-const isValidfiles = function (files) {
+const isValidfiles = function(files) {
     if (files && files.length > 0)
         return true
 }
 
 ////////////////////////////////////////////////////////////VALIDATIONS//////////////////////////////////////////////////////////////////////////////////////
 
-const createUser = async (req, res) => {
+const createUser = async(req, res) => {
 
     try {
 
@@ -258,7 +258,7 @@ const login = async function(req, res) {
         let token = jwt.sign({ userId: userId }, "Uranium-Project-5-Group-29", { expiresIn: '10h' })
 
         res.header("x-api-key", token);
-        return res.status(201).send({ status: true, message: "User Login Successfully",userId, token: token })
+        return res.status(201).send({ status: true, message: "User Login Successfully", userId, token: token })
 
     } catch (error) {
         return res.status(500).send({ status: false, message: error.message })
@@ -273,7 +273,7 @@ const getUser = async function(req, res) {
         let userId = req.params.userId
 
         //=======================================================VALIDATION================================================================================
-        let user1 =  req.userId
+        let user1 = req.userId
         if (userId !== user1) {
             return res.status(401).send({ status: false, message: "Unauthorized access! Owner info doesn't match" });
         }
@@ -320,18 +320,18 @@ const updateProfile = async(req, res) => {
 
         const files = req.files
         let Id = req.params.userId
-        const address = JSON.parse(req.body.address)
+        const address = JSON.stringify(req.body.address)
 
 
 
-        let user1 =  req.userId
+        let user1 = req.userId
         if (Id !== user1) {
             return res.status(401).send({ status: false, message: "Unauthorized access! Owner info doesn't match" });
         }
 
         //=======================================================VALIDATION================================================================================
         if (!(data.fname || data.lname || data.email || data.phone || files.profileImage || data.password || data.address))
-        return res.status(400).send({ status: false, msg: "please provide some data to update" })
+            return res.status(400).send({ status: false, msg: "please provide some data to update" })
 
         if (!isValid(data))
             return res.status(400).send({ status: false, msg: "Please enter data for update" })
@@ -346,7 +346,7 @@ const updateProfile = async(req, res) => {
         if (!validators.isValidRequestBody(data))
             return res.status(400).send({ status: false, msg: "provide detail to update" })
 
-        
+
 
         // if (!(/^[a-zA-Z]+(\s[a-zA-Z]+)?$/).test(data.fname))
         //     return res.status(400).send({ status: false, msg: "Please use valid type of fname" })
@@ -372,9 +372,9 @@ const updateProfile = async(req, res) => {
 
 
 
-        if (!(/^\d{10}$/).test(data.phone)) {
-            return res.status(400).send({ status: false, msg: "please provide a valid phone Number" })
-        }
+        // if (!(/^\d{10}$/).test(data.phone)) {
+        //     return res.status(400).send({ status: false, msg: "please provide a valid phone Number" })
+        // }
 
         let duplicatePhone = await userModel.findOne({ phone: data.phone })
         if (duplicatePhone) {
@@ -384,9 +384,9 @@ const updateProfile = async(req, res) => {
 
         //=======================================================ADDRESS VALIDATION================================================================================
 
-        if (!isValid(address)) {
-            return res.status(400).send({ status: false, message: 'address is required' })
-        }
+        // if (!isValid(address)) {
+        //     return res.status(400).send({ status: false, message: 'address is required' })
+        // }
         if (address) {
             if (address.shipping) {
                 if (!isValid(address.shipping.street)) {
@@ -431,7 +431,7 @@ const updateProfile = async(req, res) => {
 
         //==========================================================UPDATE=====================================================================================
 
-        let updateprofile = await userModel.findByIdAndUpdate({ _id: Id }, { fname: data.fname, lname: data.lname, email: data.email, address:address, phone: data.phone, password: encryptedPassword, profileImage: files.profileImage, },{new:true})
+        let updateprofile = await userModel.findByIdAndUpdate({ _id: Id }, { fname: data.fname, lname: data.lname, email: data.email, address: address, phone: data.phone, password: encryptedPassword, profileImage: files.profileImage, }, { new: true })
         return res.status(200).send({ status: true, message: "User profile updated", data: updateprofile })
 
 
