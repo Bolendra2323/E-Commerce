@@ -1,5 +1,5 @@
 #Uranium
-## Project-5 - Products Management
+## Project-5 - Product Management
 
 ## Group Members---> Akarshika Singh , Sataym Randhawa, Pankaj Kumar, Bolendra Moran
 
